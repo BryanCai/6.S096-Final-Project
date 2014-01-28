@@ -14,6 +14,7 @@ namespace nbody {
     float _mass;
   public:
     Body() : _position{}, _velocity{}, _force{}, _mass{} {}
+    Body( Vector3f p_, Vector3f v_, Vector3f f_, float m_) : _position{p_}, _velocity{v_}, _force{f_}, _mass{m_} {}
     inline Vector3f position() const { return _position; }
     inline Vector3f& position() { return _position; }
     inline Vector3f velocity() const { return _velocity; }
