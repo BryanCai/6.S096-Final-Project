@@ -1,2 +1,2 @@
-6.S096-FInal-Project
+6.S096-Final-Project
 ====================
