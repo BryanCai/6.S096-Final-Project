@@ -11,7 +11,7 @@
 
 namespace nbody {
 
-// A functor specifically for integrators. System class should friend Integrator to give Integrator access to the bodies.
+// A functor specifically for integrators.
 	class Integrator {
 	typedef void (* integrator_ptr)( Body**, size_t, float );
 
@@ -25,7 +25,7 @@ namespace nbody {
 			Integrator(integrator_ptr anIntegrator) : _integrator( anIntegrator ) { }
 					
 			void operator() ( Body **body_ptr, size_t nBodies, float dt ) {
-				(*_integrator)( body_ptr, nBodies, dt); // maybe (*_integrator)(system, dt) or maybe both works
+				(*_integrator)( body_ptr, nBodies, dt);
 			}
 			
 			// body_ptr is a pointer to body (like _body used in System class), which is a Body array
