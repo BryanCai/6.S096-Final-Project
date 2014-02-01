@@ -37,13 +37,13 @@ INCLUDE_FLAGS := -I$(INSTALL_DIR)/include \
 								 -I$(GTEST_DIR)
 
 ## Warning flags to use during compilation
-FLAGS := -m64
+FLAGS := -m64 -Wall -Wextra -Wshadow -Werror -pedantic
 # Use the C99 standard
 CFLAGS := -std=c99 $(FLAGS)
 # Use the C++11 standard and warn on violations of Meyers' "Effective C++"
 CXXFLAGS := -std=c++0x -Weffc++ $(FLAGS)
 # Flags for the linker; link to math and pthread (required for gtest)
-LDFLAGS := -L$(INSTALL_DIR)/lib -L$(GTEST_DIR)/lib -lm -lpthread -L$(GLLOAD_DIR)/lib/libglloadD.a -lglfw -lGLEW
+LDFLAGS := -L$(INSTALL_DIR)/lib -L$(GTEST_DIR)/lib -lm -lpthread -L$(GLLOAD_DIR)/lib/libglloadD.a
 
 ## Turn on debugging symbols and disable optimizations when running 'make'
 DEBUG_FLAGS := -g -O0 -D _DEBUG

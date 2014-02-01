@@ -12,7 +12,7 @@ $(TARGET_PROJ_VISUALIZATION) : $(INSTALL_DIR)/lib/lib$(PROJ_NAME).a
 ## Link our nbody-demo.x executable with libnbody.a
 ## (here is where you add any extra third-party library linkings needed)
 $(TARGET_PROJ_VISUALIZATION) : LDFLAGS += $(INSTALL_DIR)/lib/lib$(PROJ_NAME).a \
-																 -lGL -lglut -lGLEW \
+																 -lGL -lglut -lGLEW -lglfw \
                                                                 								 -I$(GLFW_DIR)/lib/ \
 								                                                                 -I$(GLM_DIR)/ \
 								                                                                 -I$(GTEST_DIR)/include \
