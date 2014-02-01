@@ -54,14 +54,14 @@ $(OBJECTS) : %.o : %.d
 ## For each required dependency file in BUILD_DIRS, we use sed and
 ## g++ -MM to generate a list of the included headers (dependencies)
 $(addsuffix /%.d, $(BUILD_DIRS)) : %.cpp
-	$(SHELL) -ec "$(CXX) -std=c++11 $(INCLUDE_FLAGS) -I$(DEV_DIR)/include -MM $< \
+	$(SHELL) -ec "$(CXX) -std=c++0x $(INCLUDE_FLAGS) -I$(DEV_DIR)/include -MM $< \
 	| sed 's|$(notdir $*)\.o[ ]*:|$*\.o $@ :|g' > $@; \
 	[ -s $@ ] || $(RM) $@"
 
 ## You should name all of your files so they end in .cpp, but gtest
 ## gtest will have some files that end in .cc we need to take care of.
 $(addsuffix /%.d, $(BUILD_DIRS)) : %.cc
-	$(SHELL) -ec "$(CXX) -std=c++11 $(INCLUDE_FLAGS) -I$(DEV_DIR)/include -MM $< \
+	$(SHELL) -ec "$(CXX) -std=c++0x $(INCLUDE_FLAGS) -I$(DEV_DIR)/include -MM $< \
 	| sed 's|$(notdir $*)\.o[ ]*:|$*\.o $@ :|g' > $@; \
 	[ -s $@ ] || $(RM) $@"
 

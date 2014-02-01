@@ -25,7 +25,6 @@ namespace nbody {
     acc = acc + NEWTON_G * j.mass() * invDistCubed * r;
   }
   
-
   void System::computeGravitation() {
     for( size_t i = 0; i < _nBodies; ++i ) {
       Vector3f acc{ 0.0f, 0.0f, 0.0f };

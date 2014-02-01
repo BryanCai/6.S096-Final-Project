@@ -19,7 +19,7 @@ namespace nbody {
     std::time_t tt = std::mktime( &timeinfo );
 
     system_clock::time_point tp = system_clock::from_time_t( tt );
-    system_clock::duration d = system_clock::now() - tp;
+    system_clock::duration d = std::chrono::system_clock::now() - tp;
     std::ostringstream os; os << duration_cast<seconds>( d ).count() << "-sim.txt";
     return os.str();
   }

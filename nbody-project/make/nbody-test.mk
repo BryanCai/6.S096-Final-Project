@@ -12,7 +12,7 @@ $(TARGET_PROJ_TEST) : $(INSTALL_DIR)/lib/lib$(PROJ_NAME).a
 ## Link our nbody-test.x executable with libnbody.a and gtest
 ## XXX ATTENTION ATTENTION ATTTENTION MACOSX USERS! XXX
 ## If -lgov is giving you problems with clang, try replacing it with --coverage
-$(TARGET_PROJ_TEST) : LDFLAGS += --coverage $(INSTALL_DIR)/lib/lib$(PROJ_NAME).a
+$(TARGET_PROJ_TEST) : LDFLAGS += -lgcov $(INSTALL_DIR)/lib/lib$(PROJ_NAME).a
 
 ## Add lots more unit tests to this list!
 OBJECTS_PROJ_TEST := \
@@ -40,5 +40,5 @@ $(OBJECTS_PROJ_TEST) : CXXFLAGS := $(filter-out -Weffc++,$(CXXFLAGS))
 $(BUILD_DIR_PROJ_TEST)/gtest-all.o : CXXFLAGS := $(filter-out -Wextra,$(CXXFLAGS))
 
 ## Needed so gtest will compile on Cygwin.
-$(OBJECTS_PROJ_TEST) : CXXFLAGS := $(filter-out -std=c++11,$(CXXFLAGS))
+$(OBJECTS_PROJ_TEST) : CXXFLAGS := $(filter-out -std=c++0x,$(CXXFLAGS))
 $(OBJECTS_PROJ_TEST) : CXXFLAGS := -std=gnu++0x $(CXXFLAGS)
