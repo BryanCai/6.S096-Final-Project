@@ -19,11 +19,10 @@ $(TARGET_PROJ_VISUALIZATION) : LDFLAGS += $(INSTALL_DIR)/lib/lib$(PROJ_NAME).a \
 																  $(GLLOAD_DIR)/lib/libglload.a \
 
 ## Add any more files to this list
-OBJECTS_PROJ_VISUALIZATION := 
-        $(BUILD_DIR_PROJ_VISUALIZATION/main.o \
-        $(BUILD_DIR_PROJ_VISUALIZATION/Graphics.o \
-	#$(BUILD_DIR_PROJ_DEMO)/otherFiles.o \
-	#$(BUILD_DIR_PROJ_DEMO)/moreOtherFiles.o \
+OBJECTS_PROJ_VISUALIZATION := \
+        $(BUILD_DIR_PROJ_VISUALIZATION)/main.o \
+        $(BUILD_DIR_PROJ_VISUALIZATION)/Graphics.o \
+
 ## Add any more files you like!
 
 $(INSTALL_DIR)/include/$(PROJ_NAME)-visualization ::

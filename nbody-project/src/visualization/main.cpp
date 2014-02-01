@@ -6,7 +6,7 @@
 #include <GL/glfw.h>
 
 int main(int argc, char** argv){
-  nbody::Graphics g {};
+  Graphics g {};
 
   //Initialize GLUT
   g.init(&argc, argv);

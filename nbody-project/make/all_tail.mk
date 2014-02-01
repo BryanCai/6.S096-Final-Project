@@ -1,14 +1,14 @@
 ## Here we set up the directories that all of the 
 ## object files will be ending up in.
 
-BUILD_DIRS := $(sort $(BUILD_DIR_PROJ) $(BUILD_DIR_PROJ_DEMO) $(BUILD_DIR_PROJ_TEST))
-TARGETS := $(sort $(TARGET_PROJ) $(TARGET_PROJ_DEMO) $(TARGET_PROJ_TEST))
+BUILD_DIRS := $(sort $(BUILD_DIR_PROJ) $(BUILD_DIR_PROJ_VISUALIZATION) $(BUILD_DIR_PROJ_TEST))
+TARGETS := $(sort $(TARGET_PROJ) $(TARGET_PROJ_VISUALIZATION) $(TARGET_PROJ_TEST))
 
 ## UPPER LEVEL (PHONY) TARGETS
 
 all : $(TARGETS)
 nbody : $(TARGET_PROJ)
-nbody-demo : $(TARGET_PROJ_DEMO)
+nbody-visualization : $(TARGET_PROJ_VISUALIZATION)
 nbody-test : $(TARGET_PROJ_TEST)
 
 ## Set compile flags for debug mode by default
@@ -36,19 +36,19 @@ release : all
 ## The targets depend on each of their objects. If any object
 ## files are newer, we'll rebuild the target.
 $(TARGET_PROJ) : $(OBJECTS_PROJ)
-$(TARGET_PROJ_DEMO) : $(OBJECTS_PROJ_DEMO)
+$(TARGET_PROJ_VISUALIZATION) : $(OBJECTS_PROJ_VISUALIZATION)
 $(TARGET_PROJ_TEST) : $(OBJECTS_PROJ_TEST)
 
 ## We need BUILD_DIR_PROJ around before we try to generate the object
 ## files or dependency files. See the link:
 ## http://www.gnu.org/software/make/manual/make.html#Prerequisite-Types
 $(OBJECTS_PROJ) $(patsubst %.o,%.d, $(OBJECTS_PROJ)) : | $(BUILD_DIR_PROJ)
-$(OBJECTS_PROJ_DEMO) $(patsubst %.o,%.d, $(OBJECTS_PROJ_DEMO)) : | $(BUILD_DIR_PROJ_DEMO)
+$(OBJECTS_PROJ_VISUALIZATION) $(patsubst %.o,%.d, $(OBJECTS_PROJ_VISUALIZATION)) : | $(BUILD_DIR_PROJ_VISUALIZATION)
 $(OBJECTS_PROJ_TEST) $(patsubst %.o,%.d, $(OBJECTS_PROJ_TEST)) : | $(BUILD_DIR_PROJ_TEST)
 ## patsubst = "pattern substitution". For this and addsuffix below, see
 ## http://www.gnu.org/software/make/manual/make.html#Text-Functions
 
-OBJECTS := $(sort $(OBJECTS_PROJ) $(OBJECTS_PROJ_DEMO) $(OBJECTS_PROJ_TEST))
+OBJECTS := $(sort $(OBJECTS_PROJ) $(OBJECTS_PROJ_VISUALIZATION) $(OBJECTS_PROJ_TEST))
 $(OBJECTS) : %.o : %.d
 
 ## For each required dependency file in BUILD_DIRS, we use sed and
@@ -69,7 +69,7 @@ $(addsuffix /%.d, $(BUILD_DIRS)) : %.cc
 ## Build all of the objects from our source files and do it
 ## in our build/projectname directory.
 $(BUILD_DIR_PROJ)/%.o : %.cpp ; $(COMPILE_CXX)
-$(BUILD_DIR_PROJ_DEMO)/%.o : %.cpp ; $(COMPILE_CXX)
+$(BUILD_DIR_PROJ_VISUALIZATION)/%.o : %.cpp ; $(COMPILE_CXX)
 $(BUILD_DIR_PROJ_TEST)/%.o : %.cpp ; $(COMPILE_CXX)
 $(BUILD_DIR_PROJ_TEST)/%.o : %.cc ; $(COMPILE_CXX)
 
@@ -94,7 +94,7 @@ $(BUILD_DIRS) $(INSTALL_DIR)/bin \
 	$(MKDIR) $@
 
 # These names don't represent real targets
-.PHONY : all clean release nbody nbody-demo nbody-test
+.PHONY : all clean release nbody nbody-visualization nbody-test
 
 # Don't delete our unit test executable even if make is killed or 
 # interrupted while it's being run.
