@@ -141,54 +141,6 @@ namespace nbody {
 *
 */
 
-
-
-// hopefully correct implementation of Improved Euler's below
-
-/*static void Integrator::HeunMethod( System system, const float dt ) {
-        Body *b = new Body[_nBodies];
-        for ( size_t i = 0; i < _nBodies; i++ ) {
-                b[i] = Body{ system._body[i].position(), system._body[i].velocity(), _body[i].force(), _body[i].mass() };
-
-                r = b[i].position();
-                v = b[i].velocity();
-                a = b[i].force();
-                
-                v = v + ( a * dt );
-                v = v * _dampingFactor;
-                r = r + v * dt;
-
-                b[i].position() = r;
-                b[i].velocity() = v;
-        }
-        
-        for ( size_t i = 0; i < _nBodies; i++ ) {
-                Vector3f acc{ 0.0f, 0.0f, 0.0f };
-                for (size_t j = 0; j < _nBodies; j++ ) {
-                        if ( i != j ) {
-                                system.interactBodies( b[i], b[j], _softFactor, acc );
-                        }
-                }
-                b[i].force() = acc;
-        }
-        
-        for ( size_t i = 0; i < _nBodies; i++ ) {
-                Vector3f r = system._body[i].position();
-                Vector3f v = system._body[i].velocity();
-                Vector3f a = system._body[i].force();
-                
-                Vector3f k_1r = v
-                Vector3f k_1v = a
-                Vector3f k_2r = b[i].velocity;
-                Vector3f k_2v = b[i].force();
-                
-                r = r + (dt/2) * (k_1r + k_2r);
-                v = v + (dt/2) * (k_1v + k_2v);
-        }
-        
-        delete[] b;
-}*/
-
 } //namespace nbody
 
 #endif
