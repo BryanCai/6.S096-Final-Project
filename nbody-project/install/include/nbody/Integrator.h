@@ -9,6 +9,14 @@
 // We'll need to add a computeGravitation method and interactBodies method for the Integrator class to do the implementations for the 
 // other integrators.  
 
+// I didn't realize the test did not include the integrator. But I ran the nbody-demo.x file and got the same results.
+// Also, I can't get this to work with just the method declarations inside the class declaration--I need the implementations.
+// Setting them to static requires this. 
+
+// The implementation for HeunMethod seems to be correct. The result is quite close to the one using Euler.
+
+// IB stands for interactBodies. And CG stands for computeGravitation. We should rename them some later. 
+
 namespace nbody {
 
 // A functor specifically for integrators.
@@ -44,6 +52,68 @@ namespace nbody {
 				(*body_ptr)[i].velocity() = v;
 				}
 			}
+			
+			inline static void IB( Body i, Body j, float softFactor, Vector3f &acc ) {
+				Vector3f r = j.position() - i.position();
+				float distance = r.norm() + softFactor;
+				float invDist = 1.0f / distance;
+				float invDistCubed = cube( invDist );
+				acc = acc + NEWTON_G * j.mass() * invDistCubed * r;
+			}
+
+			static void CG( Body *body, size_t nBodies) {
+				for( size_t i = 0; i < nBodies; ++i ) {
+					Vector3f acc{ 0.0f, 0.0f, 0.0f };
+					for( size_t j = 0; j < nBodies; ++j ) {
+						if( i != j ) {
+						IB( body[i], body[j], 1e-9f, acc ); // 1e-9f is softFactor
+						}
+					}
+					body[i].force() = acc;
+				}
+		    	}
+			
+			
+			static void HeunMethod( Body **body_ptr, size_t nBodies, const float dt ) {
+				Body **body_ptr_copy = new Body*[1];
+				body_ptr_copy[0] = new Body[nBodies];
+				for ( size_t i = 0; i < nBodies; i++ ) {
+						(*body_ptr_copy)[i].position() = (*body_ptr)[i].position(); 
+						(*body_ptr_copy)[i].velocity() = (*body_ptr)[i].velocity(); 
+						(*body_ptr_copy)[i].force() = (*body_ptr)[i].force();
+						(*body_ptr_copy)[i].mass() = (*body_ptr)[i].mass();
+
+						Vector3f r = (*body_ptr_copy)[i].position();
+						Vector3f v = (*body_ptr_copy)[i].velocity();
+						Vector3f a = (*body_ptr_copy)[i].force();
+						
+						v = v + ( a * dt );
+						v = v * 1.0f; // 1.0f is dampingFactor
+						r = r + v * dt;
+
+						(*body_ptr_copy)[i].position() = r;
+						(*body_ptr_copy)[i].velocity() = v;
+				}
+				
+				CG( *body_ptr_copy, nBodies );
+				
+				for ( size_t i = 0; i < nBodies; i++ ) {
+						Vector3f r = (*body_ptr)[i].position();
+						Vector3f v = (*body_ptr)[i].velocity();
+						Vector3f a = (*body_ptr)[i].force();
+						
+						Vector3f k_1r = v;
+						Vector3f k_1v = a;
+						Vector3f k_2r = (*body_ptr_copy)[i].velocity();
+						Vector3f k_2v = (*body_ptr_copy)[i].force();
+						
+						(*body_ptr)[i].position() = r + (dt/2) * (k_1r + k_2r);
+						(*body_ptr)[i].velocity() = v + (dt/2) * (k_1v + k_2v);
+				}
+				
+				delete [] body_ptr_copy[0];
+				delete [] body_ptr_copy;
+			}
 	};
 
 /* 		
@@ -70,54 +140,6 @@ namespace nbody {
 *		}
 *
 */
-
-
-
-// hopefully correct implementation of Improved Euler's below
-
-/*static void Integrator::HeunMethod( System system, const float dt ) {
-        Body *b = new Body[_nBodies];
-        for ( size_t i = 0; i < _nBodies; i++ ) {
-                b[i] = Body{ system._body[i].position(), system._body[i].velocity(), _body[i].force(), _body[i].mass() };
-
-                r = b[i].position();
-                v = b[i].velocity();
-                a = b[i].force();
-                
-                v = v + ( a * dt );
-                v = v * _dampingFactor;
-                r = r + v * dt;
-
-                b[i].position() = r;
-                b[i].velocity() = v;
-        }
-        
-        for ( size_t i = 0; i < _nBodies; i++ ) {
-                Vector3f acc{ 0.0f, 0.0f, 0.0f };
-                for (size_t j = 0; j < _nBodies; j++ ) {
-                        if ( i != j ) {
-                                system.interactBodies( b[i], b[j], _softFactor, acc );
-                        }
-                }
-                b[i].force() = acc;
-        }
-        
-        for ( size_t i = 0; i < _nBodies; i++ ) {
-                Vector3f r = system._body[i].position();
-                Vector3f v = system._body[i].velocity();
-                Vector3f a = system._body[i].force();
-                
-                Vector3f k_1r = v
-                Vector3f k_1v = a
-                Vector3f k_2r = b[i].velocity;
-                Vector3f k_2v = b[i].force();
-                
-                r = r + (dt/2) * (k_1r + k_2r);
-                v = v + (dt/2) * (k_1v + k_2v);
-        }
-        
-        delete[] b;
-}*/
 
 } //namespace nbody
 

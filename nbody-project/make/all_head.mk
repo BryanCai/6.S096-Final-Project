@@ -15,7 +15,6 @@ BUILD_DIR := $(DEV_DIR)/build
 INSTALL_DIR := $(DEV_DIR)/install
 GTEST_DIR := $(DEV_DIR)/third_party/gtest
 GLLOAD_DIR := $(DEV_DIR)/third_party/glsdk/glload
-GLFW_DIR := $(DEV_DIR)/third_party/glsdk/glfw
 
 ## The compilers and programs to use
 SHELL := /bin/sh
@@ -34,7 +33,6 @@ MKDIR := mkdir -p
 ## Directories to include headers from
 INCLUDE_FLAGS := -I$(INSTALL_DIR)/include \
 								 -I$(GLLOAD_DIR)/include \
-								 -I$(GLFW_DIR)/include \
 								 -I$(GTEST_DIR)/include \
 								 -I$(GTEST_DIR)
 
@@ -45,7 +43,7 @@ CFLAGS := -std=c99 $(FLAGS)
 # Use the C++11 standard and warn on violations of Meyers' "Effective C++"
 CXXFLAGS := -std=c++0x -Weffc++ $(FLAGS)
 # Flags for the linker; link to math and pthread (required for gtest)
-LDFLAGS := -L$(INSTALL_DIR)/lib -L$(GTEST_DIR)/lib -lm -lpthread
+LDFLAGS := -L$(INSTALL_DIR)/lib -L$(GTEST_DIR)/lib -lm -lpthread -L$(GLLOAD_DIR)/lib/libglloadD.a -lglfw -lGLEW
 
 ## Turn on debugging symbols and disable optimizations when running 'make'
 DEBUG_FLAGS := -g -O0 -D _DEBUG

@@ -45,6 +45,6 @@ namespace nbody {
   void Simulation::saveRun() const {
     std::ofstream output{ _name };
     _system->writeState( output );
-  }
+  }  
 
 } // namespace nbody

@@ -1,6 +1,6 @@
 #include <iostream>
 
-#include <nbody/Graphics.h>
+#include "Graphics.h"
 
 #include <GL/glew.h>
 #include <GL/glfw.h>
