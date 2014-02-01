@@ -35,6 +35,8 @@ namespace nbody {
     void update( float dt );
     void setSoftening( float soft ) { _softFactor = soft; }
     void setDamping( float damp ) { _dampingFactor = damp; }
+    inline size_t numBodies() const { return _nBodies; }
+    inline const Body getBody(size_t i) const { return _body[i]; }
   };
 
 } // namespace nbody

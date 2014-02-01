@@ -47,4 +47,8 @@ namespace nbody {
     _system->writeState( output );
   }  
 
+  const System* Simulation::getSystem() const{
+    return _system;
+  }
+
 } // namespace nbody

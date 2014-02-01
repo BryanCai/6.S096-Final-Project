@@ -12,20 +12,40 @@
 
 #include <glm/glm.hpp>
 
-Graphics::Graphics () : _mySim{}, _vertices{}, _VBOs{} {
+nbody::Simulation* Graphics::_mySim = NULL;
+std::vector<std::vector<Vector3<float> > > Graphics::_vertices;
+std::vector<GLuint> Graphics::_VBOs;
+
+Graphics::Graphics () {
+  _mySim = new nbody::Simulation{};
 }
 
-Graphics::Graphics (std::ifstream& input) : _mySim{input}, _vertices{}, _VBOs{} {
+Graphics::Graphics (std::ifstream& input) {
+  _mySim = new nbody::Simulation{ input };
 }
 
-void Graphics::displayFunc(){
+size_t count = 0;
+
+void Graphics::displayFunc() {
+  std::cout << "--- EVOLUTION " << ++count << " ---" << std::endl;
+  _mySim->evolveSystem( 1.4, 0.000001 );
+  //Graphics::updateData();
   glClear(GL_COLOR_BUFFER_BIT);
-  
+  glutSwapBuffers();
+  glutPostRedisplay();
 }
 
-//Initializes GLUT and creates a window
-void Graphics::init (int* argc, char** argv) {
+void Graphics::updateData() {
+  for(size_t i = 0; i < _mySim->getSystem()->numBodies(); i++){
+    Vector3<float> pos = _mySim->getSystem()->getBody(i).position();
+    Vector3<float> add = {pos.x() / WIDTH * SCALE, pos.y() / HEIGHT * SCALE, pos.z()};
+    std::cout << i << " " << add << std::endl;
+    _vertices[i].push_back(add);
+  }
+}
 
+//Initializes GLUT, creates a window, and initializes GLEW
+void Graphics::init (int* argc, char** argv) {
   //Initialize GLUT
   glutInit(argc, argv);
 
@@ -45,7 +65,24 @@ void Graphics::init (int* argc, char** argv) {
     std::cout << glewGetErrorString(res) << std::endl;
     std::exit(1);
   }
+}
 
+void Graphics::initFields(){
+  const nbody::System* system_ptr = _mySim->getSystem();
+  size_t nBodies = system_ptr->numBodies();
+  for(size_t i = 0; i < nBodies; i++){
+    std::vector<Vector3<float> > v;
+    _vertices.push_back(v);
+    
+    GLuint VBO;
+    glGenBuffers(1, &VBO);
+    glBindBuffer(GL_ARRAY_BUFFER, VBO);
+    _VBOs.push_back(VBO);
+  }
+}
+
+//Starts the glut main loop
+void Graphics::startMainLoop(){
   glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
   glutMainLoop();
 }
