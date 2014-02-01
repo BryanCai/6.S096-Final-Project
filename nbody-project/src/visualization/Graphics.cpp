@@ -14,7 +14,6 @@
 
 nbody::Simulation* Graphics::_mySim = NULL;
 std::vector<std::vector<Vector3<float> > > Graphics::_vertices;
-std::vector<GLuint> Graphics::_VBOs;
 
 Graphics::Graphics () {
   _mySim = new nbody::Simulation{};
@@ -27,12 +26,27 @@ Graphics::Graphics (std::ifstream& input) {
 size_t count = 0;
 
 void Graphics::displayFunc() {
+  //Evolve the simulation
   std::cout << "--- EVOLUTION " << ++count << " ---" << std::endl;
   _mySim->evolveSystem( 1.4, 0.000001 );
-  //Graphics::updateData();
-  glClear(GL_COLOR_BUFFER_BIT);
+
+  //Update the data
+  Graphics::updateData();
+
+  //Draw the stuffs!
+  glClear( GL_COLOR_BUFFER_BIT );
+
+  glBegin( GL_POINTS );
+  for( size_t i = 0; i < _vertices.size(); i++ ){
+    glColor3f( (i + 0.0f) / _vertices.size(), 1.0f - (i + 0.0) / _vertices.size(), 0.5f + 0.5f * (i + 0.0) / _vertices.size() );
+    for( size_t v = 0; v < _vertices[i].size(); v++ ){
+      glVertex2f( _vertices[i][v].x(), _vertices[i][v].y() );
+    }
+  }
+  glEnd();
+  glFinish();
+  //Swap buffers and display
   glutSwapBuffers();
-  glutPostRedisplay();
 }
 
 void Graphics::updateData() {
@@ -42,6 +56,13 @@ void Graphics::updateData() {
     std::cout << i << " " << add << std::endl;
     _vertices[i].push_back(add);
   }
+}
+
+void Graphics::keyboardFunc(unsigned char key, int x, int y) {
+  glutPostRedisplay();
+  key = key;
+  x = x;
+  y = y;
 }
 
 //Initializes GLUT, creates a window, and initializes GLEW
@@ -57,14 +78,8 @@ void Graphics::init (int* argc, char** argv) {
     
   //Callbacks
   glutDisplayFunc(displayFunc);
-   
-  //Initialize GLEW
-  GLenum res = glewInit();
-  if (res != GLEW_OK) {
-    std::cout << "Unable to initialize GLEW" << std::endl;
-    std::cout << glewGetErrorString(res) << std::endl;
-    std::exit(1);
-  }
+  glutKeyboardFunc(keyboardFunc);
+  glPointSize(4.0f);
 }
 
 void Graphics::initFields(){
@@ -73,11 +88,6 @@ void Graphics::initFields(){
   for(size_t i = 0; i < nBodies; i++){
     std::vector<Vector3<float> > v;
     _vertices.push_back(v);
-    
-    GLuint VBO;
-    glGenBuffers(1, &VBO);
-    glBindBuffer(GL_ARRAY_BUFFER, VBO);
-    _VBOs.push_back(VBO);
   }
 }
 

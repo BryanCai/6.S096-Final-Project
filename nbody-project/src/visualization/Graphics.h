@@ -3,7 +3,7 @@
 
 #define WIDTH 1024
 #define HEIGHT 768
-#define SCALE 5
+#define SCALE 200
 
 #include <nbody/Vector3.h>
 #include <nbody/Simulation.h>
@@ -16,12 +16,13 @@
 #include <glm/glm.hpp>
 
 class Graphics {
+
+  static void displayFunc();
+  static void keyboardFunc(unsigned char key, int x, int y);
+
   public:
     static nbody::Simulation *_mySim;
     static std::vector<std::vector<Vector3<float> > > _vertices;
-    static std::vector<GLuint> _VBOs;
-  
-    static void displayFunc();
 
     Graphics ();
     Graphics (std::ifstream& input);
