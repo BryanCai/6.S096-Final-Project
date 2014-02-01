@@ -28,7 +28,7 @@ size_t count = 0;
 void Graphics::displayFunc() {
   //Evolve the simulation
   std::cout << "--- EVOLUTION " << ++count << " ---" << std::endl;
-  _mySim->evolveSystem( 1.4, 0.000001 );
+  _mySim->evolveSystem( 1e4, 0.000001 );
 
   //Update the data
   Graphics::updateData();
@@ -39,11 +39,19 @@ void Graphics::displayFunc() {
   glBegin( GL_POINTS );
   for( size_t i = 0; i < _vertices.size(); i++ ){
     glColor3f( (i + 0.0f) / _vertices.size(), 1.0f - (i + 0.0) / _vertices.size(), 0.5f + 0.5f * (i + 0.0) / _vertices.size() );
-    for( size_t v = 0; v < _vertices[i].size(); v++ ){
+    for( size_t v = 0; v < _vertices[i].size() - 1; v++ ){
       glVertex2f( _vertices[i][v].x(), _vertices[i][v].y() );
     }
   }
   glEnd();
+  glPointSize(4.0f);
+  glBegin( GL_POINTS );
+  for( size_t i = 0; i < _vertices.size(); i++ ){
+    glColor3f( (i + 0.0f) / _vertices.size(), 1.0f - (i + 0.0) / _vertices.size(), 0.5f + 0.5f * (i + 0.0) / _vertices.size() );
+    glVertex2f( _vertices[i][_vertices[i].size() - 1].x(), _vertices[i][_vertices[i].size() - 1].y() );
+  }
+  glEnd();
+  glPointSize(2.0f);
   glFinish();
   //Swap buffers and display
   glutSwapBuffers();
@@ -52,9 +60,9 @@ void Graphics::displayFunc() {
 void Graphics::updateData() {
   for(size_t i = 0; i < _mySim->getSystem()->numBodies(); i++){
     Vector3<float> pos = _mySim->getSystem()->getBody(i).position();
-    std::cout << "Original position for body " << i << ": " << pos << std::endl;
+    //std::cout << "Original position for body " << i << ": " << pos << std::endl;
     Vector3<float> add = {pos.x() / WIDTH * SCALE, pos.y() / HEIGHT * SCALE, pos.z()};
-    std::cout << "Scaled down position: " << add << std::endl;
+    //std::cout << "Scaled down position: " << add << std::endl;
     _vertices[i].push_back(add);
   }
 }
@@ -80,7 +88,7 @@ void Graphics::init (int* argc, char** argv) {
   //Callbacks
   glutDisplayFunc(displayFunc);
   glutKeyboardFunc(keyboardFunc);
-  glPointSize(4.0f);
+  glPointSize(2.0f);
 }
 
 void Graphics::initFields(){

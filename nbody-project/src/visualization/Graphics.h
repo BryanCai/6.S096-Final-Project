@@ -3,7 +3,7 @@
 
 #define WIDTH 1024
 #define HEIGHT 768
-#define SCALE 200
+#define SCALE 1000
 
 #include <nbody/Vector3.h>
 #include <nbody/Simulation.h>
