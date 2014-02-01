@@ -52,8 +52,9 @@ void Graphics::displayFunc() {
 void Graphics::updateData() {
   for(size_t i = 0; i < _mySim->getSystem()->numBodies(); i++){
     Vector3<float> pos = _mySim->getSystem()->getBody(i).position();
+    std::cout << "Original position for body " << i << ": " << pos << std::endl;
     Vector3<float> add = {pos.x() / WIDTH * SCALE, pos.y() / HEIGHT * SCALE, pos.z()};
-    std::cout << i << " " << add << std::endl;
+    std::cout << "Scaled down position: " << add << std::endl;
     _vertices[i].push_back(add);
   }
 }
