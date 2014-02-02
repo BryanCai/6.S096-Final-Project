@@ -18,6 +18,7 @@ namespace nbody {
     System( const System &sys ) = delete;
     System& operator=( const System &sys ) = delete;
   public:
+    System( Body *body, size_t N) : _nBodies{N}, _body{ body }, _softFactor{ 1e-9f }, _dampingFactor {1.0f} { } 
     System( size_t N ) : _nBodies{N}, _body{ new Body[N] }, _softFactor{ 1e-9f }, _dampingFactor {1.0f} { initRandomState(); }
     System( std::istream &input ) : _nBodies{}, _body{nullptr}, _softFactor{ 1e-9f }, _dampingFactor {1.0f} { readState( input ); }
     System( std::string filename ) : _nBodies{}, _body{nullptr}, _softFactor{ 1e-9f }, _dampingFactor {1.0f} { readState( filename ); }
