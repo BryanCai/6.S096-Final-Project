@@ -4,15 +4,6 @@
 #include <nbody/Vector3.h>
 #include <nbody/Body.h>
 
-// This (which means we exclude everything that's commented-out!) works with the original file when we tweak the System class a little.
-// So this compiles and passes the tests. And EulerMethod here is basically the same as what they gave us for System::integrateSystem.
-// We'll need to add a computeGravitation method and interactBodies method for the Integrator class to do the implementations for the 
-// other integrators.  
-
-// I didn't realize the test did not include the integrator. But I ran the nbody-demo.x file and got the same results.
-// Also, I can't get this to work with just the method declarations inside the class declaration--I need the implementations.
-// Setting them to static requires this. 
-
 // The implementation for HeunMethod seems to be correct. The result is quite close to the one using Euler.
 
 // IB stands for interactBodies. And CG stands for computeGravitation. We should rename them some later. 
@@ -116,28 +107,32 @@ namespace nbody {
 			}
 	};
 
-/* 		
-*		Implementation for integrateSystemWith method 
+/*
+* Implementation for integrateSystemWith method
 *
-*		void System::integrateSystemWith( Integrator myIntegrator, float dt ) {
-*			myIntegrator( &(this->_body), this->_nBodies, dt );
-*		}
+* void System::integrateSystemWith( Integrator myIntegrator, float dt ) {
+* myIntegrator( &(this->_body), this->_nBodies, dt );
+* }
 *
 */
-	
+
 /*
-*		How to use this:
-*		
-*		1.	Add System::integrateSystemWith( Integrator myIntegrator, float dt ) function to System class
-*		2.	Change implementation of System::update( float dt );
-*		3.	Instead of integrateSystem( float dt ), call the Integrator constructor and use integrateSystemWith method
-*		4. Here's an example:
+* How to use this:
 *
-*		void System::update( float dt ) {		
-*			computeGravitation();
-*			Integrator anIntegrator( Integrator::EulerMethod );		
-*			integrateSystemWith( anIntegrator, dt );
-*		}
+* 1. Add System::integrateSystemWith( Integrator myIntegrator, float dt ) function to System class
+* 2. Add parameter to System::update( float dt ); --> System::update( void (*integrator_ptr)( Body**, size_t, float ), float dt );
+* 3. Instead of integrateSystem( float dt ), call the Integrator constructor and use integrateSystemWith method
+* 4. Here's an example:
+*
+* void System::update( void (*integrator_ptr)(Body**, size_t, float), float dt ) {
+* computeGravitation();
+* Integrator anIntegrator( *integrator_ptr );
+* integrateSystemWith( anIntegrator, dt );
+* }
+*
+* 5. In Simulation.cpp add the method of integration in the _system->update() function call in Simulation::evolveSystem(). Like such:
+*
+* _system->update( Integrator::EulerMethod, dt );
 *
 */
 
