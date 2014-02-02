@@ -28,6 +28,7 @@ namespace nbody {
     void computeGravitation();
     void computeGravitationRK4( float dt );
     void integrateSystem( float dt );
+    void integrateSystemWith( Integrator anIntegrator, float dt );
     void readState( std::istream &input );
     void readState( std::string filename );
     void writeState( std::ostream &output ) const;
