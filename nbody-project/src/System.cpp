@@ -119,9 +119,12 @@ namespace nbody {
     }
   }
 
-  void System::update( float dt ) {
-    computeGravitationRK4( dt );
-    integrateSystem( dt );
+  void System::update( void (*intgrator_ptr)( Body**, size_t, float ), float dt ) {
+    //computeGravitationRK4( dt );
+    //integrateSystem( dt );
+    computeGravitation();
+    Integrator anIntegrator ( *integrator_ptr );
+    integrateSystemWith( anIntegrator, dt );
   }
 
   void System::readState( std::istream &input ) {
