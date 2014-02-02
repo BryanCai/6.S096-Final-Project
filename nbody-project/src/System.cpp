@@ -119,7 +119,11 @@ namespace nbody {
     }
   }
 
-  void System::update( void (*intgrator_ptr)( Body**, size_t, float ), float dt ) {
+  void System::integrateSystemWith( Integrator myIntegrator, float dt ) {
+     myIntegrator( &(this->_body), this->_nBodies, dt );
+  }
+
+  void System::update( void (*integrator_ptr)( Body**, size_t, float ), float dt ) {
     //computeGravitationRK4( dt );
     //integrateSystem( dt );
     computeGravitation();

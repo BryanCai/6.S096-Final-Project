@@ -3,6 +3,7 @@
 
 #include <nbody/Vector3.h>
 #include <nbody/Body.h>
+#include <nbody/Integrator.h>
 
 #include <iosfwd>
 #include <string>
@@ -27,7 +28,7 @@ namespace nbody {
     void interactBodies( Body i, Body j, float softFactor, Vector3f &acc ) const;
     void computeGravitation();
     void computeGravitationRK4( float dt );
-    void integrateSystem( float dt );
+    void integrateSystem( float dt );    
     void integrateSystemWith( Integrator anIntegrator, float dt );
     void readState( std::istream &input );
     void readState( std::string filename );
@@ -35,6 +36,7 @@ namespace nbody {
     void writeState( std::string filename ) const;
     void initRandomState();
     void update( float dt );
+    void update( void (*intgrator_ptr)( Body**, size_t, float ), float dt );
     void setSoftening( float soft ) { _softFactor = soft; }
     void setDamping( float damp ) { _dampingFactor = damp; }
     inline size_t numBodies() const { return _nBodies; }

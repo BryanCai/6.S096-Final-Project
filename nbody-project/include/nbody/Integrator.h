@@ -2,6 +2,7 @@
 #define _INTEGRATOR_H
 
 #include <nbody/Vector3.h>
+#include <nbody/constants.h>
 #include <nbody/Body.h>
 
 // The implementation for HeunMethod seems to be correct. The result is quite close to the one using Euler.
@@ -69,10 +70,11 @@ namespace nbody {
 				Body **body_ptr_copy = new Body*[1];
 				body_ptr_copy[0] = new Body[nBodies];
 				for ( size_t i = 0; i < nBodies; i++ ) {
-						(*body_ptr_copy)[i].position() = (*body_ptr)[i].position(); 
-						(*body_ptr_copy)[i].velocity() = (*body_ptr)[i].velocity(); 
-						(*body_ptr_copy)[i].force() = (*body_ptr)[i].force();
-						(*body_ptr_copy)[i].mass() = (*body_ptr)[i].mass();
+                                                (*body_ptr_copy)[i] = Body{ (*body_ptr)[i].position(),(*body_ptr)[i].velocity(),(*body_ptr)[i].force(),(*body_ptr)[i].mass() };
+						//(*body_ptr_copy)[i].position() = (*body_ptr)[i].position(); 
+						//(*body_ptr_copy)[i].velocity() = (*body_ptr)[i].velocity(); 
+						//(*body_ptr_copy)[i].force() = (*body_ptr)[i].force();
+						//(*body_ptr_copy)[i].mass() = (*body_ptr)[i].mass();
 
 						Vector3f r = (*body_ptr_copy)[i].position();
 						Vector3f v = (*body_ptr_copy)[i].velocity();
