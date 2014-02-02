@@ -1,11 +1,7 @@
 #include <nbody/System.h>
 #include <gtest/gtest.h>
 
-// To use this, go to nbody-project/make/nbody-test.mk and add
-// in the line after
 
-
-// Changed to non-trivial test.
  
 void makeAssertions( nbody::Body **body_ptr, size_t i,
 						float assert_pos_x, float assert_pos_y, float assert_pos_z,
